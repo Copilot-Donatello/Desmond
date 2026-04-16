@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<title>Contact Us - Cali Clear</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/responsive.css">
+<link rel="stylesheet" href="components/assets/css/components.css">
+
+<!-- JS for navbar toggle -->
+<script src="assets/js/main.js"></script>
+<script src="assets/js/toast.js"></script>
+
+<style>
+body {
+  background: #f7f7f7;
+  font-family: Arial, sans-serif;
+}
+
+.hero-contact {
+  background: url('assets/images/hero/contact-hero.jpg') center/cover no-repeat;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  position: relative;
+  text-align: center;
+}
+
+.hero-contact::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.hero-contact h1 {
+  position: relative;
+  font-size: 42px;
+  font-weight: bold;
+}
+
+.contact-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  padding: 0 20px;
+}
+
+.contact-form, .contact-info {
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  flex: 1;
+  min-width: 300px;
+}
+
+.contact-form h2, .contact-info h2 {
+  color: #ff6f61;
+  margin-bottom: 20px;
+}
+
+.contact-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.contact-form textarea {
+  resize: vertical;
+  height: 120px;
+}
+
+.contact-form button {
+  background-color: #ff6f61;
+  color: #fff;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.contact-form button:hover {
+  background-color: #e65c50;
+}
+
+.contact-info p {
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.contact-info i {
+  color: #ff6f61;
+  margin-right: 10px;
+}
+
+/* Map */
+.contact-map iframe {
+  width: 100%;
+  border: none;
+  height: 250px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px){
+  .contact-container {
+    flex-direction: column;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div id="navbar-placeholder"></div>
+<div id="footer-placeholder"></div>
+<script>
+  function loadFooterWithChat() {
+    fetch('components/footer.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('footer-placeholder').innerHTML = data;
+
+        // Ensure chat bootstrap script is loaded and initialized (works for injected footer)
+        if (!document.getElementById('chatbot-script')) {
+          const s = document.createElement('script');
+          s.id = 'chatbot-script';
+          s.src = 'assets/js/chatbot.js';
+          s.onload = () => { if (typeof initChat === 'function') initChat(); };
+          document.body.appendChild(s);
+        } else if (typeof initChat === 'function') {
+          initChat();
+        }
+      })
+      .catch(err => console.error('Error loading footer:', err));
+  }
+
+  document.addEventListener('DOMContentLoaded', loadFooterWithChat);
+</script>
+
+<main class="contact-main" style="max-width: 900px; margin: 40px auto; padding: 20px;">
+  <h1>Contact Us</h1>
+  <p>Need help? Get in touch with our support team and we’ll respond within 24h.</p>
+  <form id="contactForm" style="display:grid;gap:14px;">
+    <input type="text" id="contactName" placeholder="Full Name" required style="padding:10px;border-radius:8px;border:1px solid #ccc;">
+    <input type="email" id="contactEmail" placeholder="Email Address" required style="padding:10px;border-radius:8px;border:1px solid #ccc;">
+    <textarea id="contactMessage" rows="6" placeholder="How can we help?" required style="padding:10px;border-radius:8px;border:1px solid #ccc;"></textarea>
+    <button type="submit" style="background:#ff6f61;color:#fff;padding:12px 18px;border:none;border-radius:8px;cursor:pointer;">Send Message</button>
+  </form>
+  <div id="contactFeedback" style="margin-top:10px;color:#4caf50;display:none;">Thank you! We’ll be in touch soon.</div>
+</main>
+
+<script>
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    document.getElementById('contactFeedback').style.display = 'block';
+    contactForm.reset();
+  });
+}
+</script>
+
+<!-- JS -->
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  showToast("Thank you! Your message has been sent.");
+  document.getElementById('contactForm').reset();
+});
+</script>
+
+</body>
+</html>
+

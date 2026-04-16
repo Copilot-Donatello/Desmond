@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<title>FAQ - Cali Clear</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/responsive.css">
+<link rel="stylesheet" href="components/assets/css/components.css">
+
+<!-- JS for navbar toggle -->
+<script src="assets/js/main.js"></script>
+<script src="assets/js/toast.js"></script>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background: #f7f7f7;
+    margin:0;
+    padding:0;
+}
+
+.hero-faq{
+    background: url('assets/images/hero/hero1.jpg') center/cover no-repeat;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    position: relative;
+    text-align: center;
+}
+
+.hero-faq::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.hero-faq h1{
+    position: relative;
+    font-size: 42px;
+    font-weight:bold;
+}
+
+.faq-container{
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.accordion{
+    background:#fff;
+    border-radius:8px;
+    margin-bottom:15px;
+    padding:15px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.1);
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.accordion:hover{
+    background:#fff3f1;
+}
+
+.accordion h3{
+    margin:0;
+    font-size:18px;
+    color:#ff6f61;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.accordion h3::after{
+    content:'+';
+    font-size:22px;
+    color:#ff6f61;
+}
+
+.accordion.active h3::after{
+    content:'-';
+}
+
+.panel{
+    max-height:0;
+    overflow:hidden;
+    transition: max-height 0.3s ease;
+    font-size:14px;
+    margin-top:10px;
+    color:#333;
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div id="navbar-placeholder"></div>
+<div id="footer-placeholder"></div>
+<script>
+  function loadFooterWithChat() {
+    fetch('components/footer.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('footer-placeholder').innerHTML = data;
+
+        // Ensure chat bootstrap script is loaded and initialized (works for injected footer)
+        if (!document.getElementById('chatbot-script')) {
+          const s = document.createElement('script');
+          s.id = 'chatbot-script';
+          s.src = 'assets/js/chatbot.js';
+          s.onload = () => { if (typeof initChat === 'function') initChat(); };
+          document.body.appendChild(s);
+        } else if (typeof initChat === 'function') {
+          initChat();
+        }
+      })
+      .catch(err => console.error('Error loading footer:', err));
+  }
+
+  document.addEventListener('DOMContentLoaded', loadFooterWithChat);
+</script>
+
+<script>
+// Accordion functionality
+const accordions = document.querySelectorAll(".accordion");
+accordions.forEach(acc=>{
+    acc.addEventListener("click", ()=>{
+        acc.classList.toggle("active");
+        const panel = acc.querySelector(".panel");
+        if(acc.classList.contains("active")){
+            panel.style.maxHeight = panel.scrollHeight + "px";
+        } else {
+            panel.style.maxHeight = null;
+        }
+    });
+});
+</script>
+
+</body>
+</html>
+

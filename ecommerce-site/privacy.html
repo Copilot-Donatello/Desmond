@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<title>Privacy Policy - Cali Clear</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/animations.css">
+<link rel="stylesheet" href="assets/css/responsive.css">
+<link rel="stylesheet" href="components/assets/css/components.css">
+
+<!-- JS for navbar toggle -->
+<script src="assets/js/main.js"></script>
+<script src="assets/js/toast.js"></script>
+
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #121212;
+  color: #e0e0e0;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: 50px auto;
+  padding: 0 20px;
+}
+
+h1, h2 {
+  color: #ff6f61;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+p, li {
+  line-height: 1.6;
+  color: #ddd;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+a {
+  color: #ff6f61;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div id="navbar-placeholder"></div>
+<div id="footer-placeholder"></div>
+<script>
+  function loadFooterWithChat() {
+    fetch('components/footer.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('footer-placeholder').innerHTML = data;
+
+        // Ensure chat bootstrap script is loaded and initialized (works for injected footer)
+        if (!document.getElementById('chatbot-script')) {
+          const s = document.createElement('script');
+          s.id = 'chatbot-script';
+          s.src = 'assets/js/chatbot.js';
+          s.onload = () => { if (typeof initChat === 'function') initChat(); };
+          document.body.appendChild(s);
+        } else if (typeof initChat === 'function') {
+          initChat();
+        }
+      })
+      .catch(err => console.error('Error loading footer:', err));
+  }
+
+  document.addEventListener('DOMContentLoaded', loadFooterWithChat);
+</script>
+
+</body>
+</html>
+

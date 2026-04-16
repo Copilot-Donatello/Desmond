@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <title>About Us - Cali Clear</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="stylesheet" href="components/assets/css/components.css">
+
+  <!-- JS for navbar toggle -->
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/toast.js"></script>
+  <style>
+    /* Hero Section */
+    .about-hero {
+      background: url('assets/images/hero/about-hero.jpg') center/cover no-repeat;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      text-align: center;
+      position: relative;
+    }
+
+    .about-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .about-hero h1 {
+      position: relative;
+      font-size: 48px;
+      font-weight: bold;
+      z-index: 1;
+    }
+
+    /* About Section */
+    .about-section {
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 0 20px;
+      display: flex;
+      gap: 40px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .about-text {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .about-text h2 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      color: #ff6f61;
+    }
+
+    .about-text p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    .about-text ul {
+      margin: 1rem 0;
+      padding-left: 1.5rem;
+      color: #555;
+    }
+
+    .about-text li {
+      margin-bottom: 0.5rem;
+    }
+
+    .about-image {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .about-image img {
+      width: 100%;
+      border-radius: 12px;
+    }
+
+    /* Business Info Box */
+    .business-info-box {
+      background: #f5f5f5;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-top: 1.5rem;
+      border-left: 4px solid #ff6f61;
+    }
+
+    .business-info-box h3 {
+      margin-top: 0;
+      color: #ff6f61;
+    }
+
+    .business-info-box p {
+      margin: 0.5rem 0;
+    }
+
+    /* Trust Badge */
+    .trust-badge-large {
+      display: inline-block;
+      background: #4caf50;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    /* Team Section */
+    .team-section {
+      background-color: #f9f9f9;
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    .team-section h2 {
+      font-size: 32px;
+      margin-bottom: 30px;
+      color: #ff6f61;
+    }
+
+    .team-cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .team-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      width: 250px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+
+    .team-card img {
+      width: 100%;
+      border-radius: 50%;
+      margin-bottom: 15px;
+    }
+
+    .team-card h3 {
+      margin: 0 0 10px 0;
+      font-size: 20px;
+      color: #333;
+    }
+
+    .team-card p {
+      margin: 0;
+      font-size: 14px;
+      color: #777;
+    }
+
+    /* Values Section */
+    .values-section {
+      padding: 50px 20px;
+      text-align: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .values-section h2 {
+      font-size: 32px;
+      margin-bottom: 30px;
+      color: #ff6f61;
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .value-card {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .value-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .value-card h3 {
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .value-card p {
+      color: #777;
+      font-size: 14px;
+    }
+
+    /* CTA Section */
+    .about-cta {
+      text-align: center;
+      padding: 40px 20px;
+      background: #f5f5f5;
+    }
+
+    .about-cta h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .about-cta a {
+      background-color: #ff6f61;
+      color: #fff;
+      padding: 12px 30px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+      display: inline-block;
+    }
+
+    .about-cta a:hover {
+      background-color: #e65c50;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .about-section {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div id="navbar-placeholder"></div>
+  <div id="footer-placeholder"></div>
+  <script>
+  function loadFooterWithChat() {
+    fetch('components/footer.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('footer-placeholder').innerHTML = data;
+
+        // Ensure chat bootstrap script is loaded and initialized (works for injected footer)
+        if (!document.getElementById('chatbot-script')) {
+          const s = document.createElement('script');
+          s.id = 'chatbot-script';
+          s.src = 'assets/js/chatbot.js';
+          s.onload = () => { if (typeof initChat === 'function') initChat(); };
+          document.body.appendChild(s);
+        } else if (typeof initChat === 'function') {
+          initChat();
+        }
+      })
+      .catch(err => console.error('Error loading footer:', err));
+  }
+
+  document.addEventListener('DOMContentLoaded', loadFooterWithChat);
+</script>
+
+<main class="about-main">
+  <section class="about-hero">
+    <div class="about-content" style="position:relative;z-index:2;">
+      <h1>About Cali Clear</h1>
+      <p>High-quality products. Fast shipping. Trusted service.</p>
+    </div>
+  </section>
+  <section class="about-section">
+    <div class="about-text">
+      <h2>Who We Are</h2>
+      <p>We are a customer-first e-commerce brand delivering reliable products for everyday use.</p>
+      <ul>
+        <li>Premium product lineup</li>
+        <li>Safe and secure checkout</li>
+        <li>Fast shipping and easy returns</li>
+      </ul>
+    </div>
+    <div class="about-image">
+      <img src="assets/images/hero/about-hero.jpg" alt="About Image">
+    </div>
+  </section>
+</main>
+
+</body>
+</html>
+
