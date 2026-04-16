@@ -3,8 +3,6 @@
     "id": 9,
     "name": "Cool Mint",
     "price": 17.99,
-    "wholesalePrice": 7.50,
-    "wholesaleMin": 10,
     "image": "assets/images/products/Cool Mint.jfif",
     "category": "Vapes",
     "description": "Icy cool mint for a refreshing vape.",

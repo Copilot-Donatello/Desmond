@@ -98,13 +98,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const priceEl = document.getElementById("product-price");
     if (priceEl) {
-      let priceHtml = `$${Number(product.price).toFixed(2)}`;
-      if (product.wholesalePrice) {
-        priceHtml += ` <span class="product-price-retail" style="text-decoration: line-through; color: #999; font-size: 14px;">Retail</span>`;
-        priceHtml += `<br><span class="product-price-wholesale" style="color: #2ecc71;">$${Number(product.wholesalePrice).toFixed(2)} Wholesale</span>`;
-        priceHtml += `<span class="wholesale-note">Min ${product.wholesaleMin || 10}+ units</span>`;
-      }
-      priceEl.innerHTML = priceHtml;
+      priceEl.innerHTML = `$${Number(product.price).toFixed(2)}`;
     }
 
     const ratingEl = document.getElementById("product-rating");
@@ -188,27 +182,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     console.log('Rendering', products.length, 'products');
     grid.innerHTML = products.map(p => {
-      // Handle both image and image_url fields
       const imgSrc = p.image_url || p.image || 'assets/images/logo.png';
       const rating = p.rating || 4;
       const name = p.cleanName || p.name || 'Product';
-      const retailPrice = Number(p.price || 0).toFixed(2);
-      const wholesalePrice = p.wholesalePrice ? Number(p.wholesalePrice).toFixed(2) : null;
-      const wholesaleMin = p.wholesaleMin || 10;
-      
-      let priceHtml = `<span class="product-price-retail">$${retailPrice}</span>`;
-      if (wholesalePrice) {
-        priceHtml += `<span class="product-price-wholesale">$${wholesalePrice} <span class="wholesale-badge">Wholesale</span></span>`;
-        priceHtml += `<span class="wholesale-note">Min ${wholesaleMin}+ units</span>`;
-      }
+      const price = Number(p.price || 0).toFixed(2);
       
       return `
         <div class="product-card">
           <img src="${imgSrc}" alt="${name}" onerror="this.src='assets/images/logo.png'">
           <h4>${name}</h4>
           <div class="product-rating">${"★".repeat(rating)}${"☆".repeat(5 - rating)}</div>
-          <div class="product-price">${priceHtml}</div>
-          <button class="btn add-to-cart" data-id="${p.id}" data-name="${name}" data-price="${Number(p.price || 0).toFixed(2)}" data-wholesale="${wholesalePrice || ''}">Add to Cart</button>
+          <p class="product-price">$${price}</p>
+          <button class="btn add-to-cart" data-id="${p.id}" data-name="${name}" data-price="${price}">Add to Cart</button>
         </div>
       `;
     }).join("");

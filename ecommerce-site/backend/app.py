@@ -189,7 +189,8 @@ with app.app_context():
 
     # Seed default payment methods if table is empty
     from database.models import PaymentMethod
-    if PaymentMethod.query.count() == 0:
+    active_count = PaymentMethod.query.filter_by(active=True).count()
+    if active_count == 0:
         import json as _json
         defaults = [
             {
@@ -198,7 +199,8 @@ with app.app_context():
                 'icon': '💳',
                 'account_details': _json.dumps({'username': '@YOUR-VENMO'}),
                 'instructions': 'Send payment to Venmo: @YOUR-VENMO\nInclude your Order ID in the note.',
-                'sort_order': 1
+                'sort_order': 1,
+                'active': True
             },
             {
                 'name': 'Cash App',
@@ -206,7 +208,8 @@ with app.app_context():
                 'icon': '💵',
                 'account_details': _json.dumps({'cashtag': '$YOUR-CASHTAG'}),
                 'instructions': 'Send payment to Cash App: $YOUR-CASHTAG\nInclude your Order ID in the note.',
-                'sort_order': 2
+                'sort_order': 2,
+                'active': True
             },
             {
                 'name': 'PayPal',
@@ -214,7 +217,8 @@ with app.app_context():
                 'icon': '🅿️',
                 'account_details': _json.dumps({'email': 'your-paypal@email.com'}),
                 'instructions': 'Send payment to PayPal: your-paypal@email.com\nInclude your Order ID in the note.',
-                'sort_order': 3
+                'sort_order': 3,
+                'active': True
             },
             {
                 'name': 'Bank Transfer',
@@ -227,7 +231,8 @@ with app.app_context():
                     'account_name': 'YOUR NAME'
                 }),
                 'instructions': 'Bank Transfer Details:\nBank: YOUR BANK\nAccount: 0000000000\nRouting: 000000000\nName: YOUR NAME\nPlease include your Order ID in the transfer memo.',
-                'sort_order': 4
+                'sort_order': 4,
+                'active': True
             }
         ]
         for d in defaults:
