@@ -35,7 +35,7 @@ def create_message():
     
     # Notify admin of new message
     send_email(
-        'support@caliclear.shop',
+        'caliclearsupport@gmail.com',
         f'New message from {name}',
         f'Customer {name} ({email}) sent a message:\n\n{message}'
     )
@@ -108,7 +108,7 @@ def upload_payment_proof():
     
     # Notify admin
     send_email(
-        'support@caliclear.shop',
+        'caliclearsupport@gmail.com',
         f'Payment proof submitted - Order #{order_id}',
         f'{name} ({email}) submitted payment proof for Order #{order_id}.\nTransaction ID: {transaction_id or "N/A"}\n\nPlease verify in admin dashboard.'
     )

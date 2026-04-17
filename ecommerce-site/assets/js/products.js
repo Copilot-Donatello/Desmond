@@ -1,6 +1,5 @@
 // Products JS - Full Integration with Backend API
-// Use existing API_URL or define it (check to avoid redeclaration)
-var API_URL = typeof API_URL !== 'undefined' ? API_URL : '/api';
+var API_URL = 'https://desmond-zsj8.onrender.com';
 
 document.addEventListener("DOMContentLoaded", async () => {
   const productId = new URLSearchParams(window.location.search).get("id");
@@ -212,10 +211,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   // CART LOGIC
   // ===============================
   async function addToCart(product) {
+    const API = 'https://desmond-zsj8.onrender.com';
+
     const qty = Math.max(1, Math.min(Number(document.getElementById("qty")?.value || 1), product.stock || 99));
 
     try {
-      const response = await fetch('/api/cart/add', {
+      const response = await fetch(`${API}/cart/add`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ product_id: product.id, quantity: qty }),

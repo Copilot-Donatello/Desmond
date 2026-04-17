@@ -1,4 +1,4 @@
-const API_URL = '/api';
+const API_URL = 'https://desmond-zsj8.onrender.com';
 
 let productsData = [];
 let localCart = [];

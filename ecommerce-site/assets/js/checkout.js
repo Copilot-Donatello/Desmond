@@ -1,4 +1,5 @@
 // Checkout form & payment UI logic
+const API_URL = 'https://desmond-zsj8.onrender.com';
 document.addEventListener('DOMContentLoaded', function() {
 	const form = document.getElementById('checkout-form');
 	const steps = document.querySelectorAll('.step');
@@ -72,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	// Fetch cart from API
 	async function fetchCartFromAPI() {
 		try {
-			const response = await fetch('/api/cart', { 
+			const response = await fetch(`${API_URL}/cart`, { 
 				credentials: 'include',
 				headers: { 'Cache-Control': 'no-cache' }
 			});
@@ -197,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	 */
 	async function createOrderAPI(orderData) {
 		try {
-			const response = await fetch('/api/orders', {
+			const response = await fetch(`${API_URL}/orders`, {
 				method: 'POST',
 				headers: getAuthHeaders(),
 				body: JSON.stringify(orderData)
@@ -404,7 +405,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			if (result.success) {
 				// Clear cart from API and localStorage
 				try {
-					await fetch('/api/cart/clear', {
+					await fetch(`${API_URL}/cart/clear`, {
 						method: 'DELETE',
 						credentials: 'include'
 					});

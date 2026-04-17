@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	const grid = document.getElementById('featured-products-grid');
 	if (!grid) return;
 
-	const API_URL = '/api';
+	const API_URL = 'https://desmond-zsj8.onrender.com';
 
 	// Fetch products from API
 	async function fetchProducts() {

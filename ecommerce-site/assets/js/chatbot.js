@@ -1,4 +1,5 @@
 // Chat widget - supports order-linked messages, quick actions, payment proof
+const API_URL = 'https://desmond-zsj8.onrender.com';
 let chatEmail = null;
 let chatName = null;
 let chatPollInterval = null;
@@ -161,7 +162,7 @@ function initChat() {
 
     // Send to backend
     const orderId = window._chatOrderId || localStorage.getItem('last_order_id') || null;
-    fetch('/api/messages', {
+    fetch(`${API_URL}/messages`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -382,7 +383,7 @@ async function chatQuickAction(action, orderId) {
   if (!chatEmail) return;
 
   try {
-    const r = await fetch('/api/messages/quick-action', {
+    const r = await fetch(`${API_URL}/messages/quick-action`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -414,7 +415,7 @@ function sendManualPaymentDetails(orderId, details) {
   loadChatHistory();
 
   // Optional backend send: if endpoint exists
-  fetch('/api/messages', {
+  fetch(`${API_URL}/messages`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -481,7 +482,7 @@ async function chatSubmitProof(orderId) {
   }
 
   try {
-    const r = await fetch('/api/messages/proof', {
+    const r = await fetch(`${API_URL}/messages/proof`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

@@ -825,7 +825,7 @@ def get_settings():
         'currency': 'USD',
         'tax_rate': 0.10,
         'free_shipping_threshold': 50.00,
-        'contact_email': 'support@caliclear.com',
+        'contact_email': 'caliclearsupport@gmail.com',
         'enable_notifications': True
     }
     return success_response({'settings': settings}), 200

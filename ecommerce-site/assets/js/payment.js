@@ -4,6 +4,8 @@
  * Supports: Visa, Mastercard, Amex, Discover, PayPal, Apple Pay, Google Pay, Afterpay, Klarna, Bank Transfer
  */
 
+const API_URL = 'https://desmond-zsj8.onrender.com';
+
 // Configuration - loaded from backend via initStripeConfig()
 // Get from Stripe Dashboard: https://dashboard.stripe.com/apikeys
 // This is set dynamically from backend API
@@ -70,7 +72,7 @@ const PAYMENT_METHOD_LABELS = {
 // Initialize Stripe configuration from backend
 async function initStripeConfig() {
     try {
-        const response = await fetch('/api/config/stripe');
+        const response = await fetch(`${API_URL}/config/stripe`);
         if (response.ok) {
             const data = await response.json();
             if (data.data && data.data.publishable_key) {
