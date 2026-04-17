@@ -1,90 +1,23 @@
-// Cart logic with backend API
 const API_URL = '/api';
 
-let cart = [];
-let coupon = null;
+let productsData = [];
+let localCart = [];
 
-function getCart() {
+function getLocalCart() {
     try {
         const saved = localStorage.getItem('cart');
         return saved ? JSON.parse(saved) : [];
     } catch { return []; }
 }
 
-function saveCart(cart) {
+function saveLocalCart(cart) {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-function getProductInfo(productId) {
-    return productsData.find(p => String(p.id) === String(productId));
-}
-
-function getPriceForQuantity(productId, quantity) {
-    const product = getProductInfo(productId);
-    if (!product) return null;
-    return {
-        price: Number(product.price),
-    };
-}
-
 function updateCartCount() {
-    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const count = localCart.reduce((sum, item) => sum + item.quantity, 0);
     const badge = document.getElementById('cart-count');
     if (badge) badge.textContent = count;
-}
-
-async function addToCart(productId, name, price, quantity = 1, image = '') {
-    cart = getCart();
-    const existing = cart.find(item => String(item.product_id) === String(productId));
-    if (existing) {
-        existing.quantity += quantity;
-    } else {
-        cart.push({ product_id: productId, name, price, quantity, image });
-    }
-    saveCart(cart);
-    updateCartCount();
-    showToast(`${name} added to cart!`, 'success');
-}
-
-function removeFromCart(productId) {
-    cart = cart.filter(item => String(item.product_id) !== String(productId));
-    saveCart(cart);
-    updateCartCount();
-    renderCart();
-}
-
-function updateQuantity(productId, quantity) {
-    const item = cart.find(item => String(item.product_id) === String(productId));
-    if (item) {
-        item.quantity = Math.max(1, quantity);
-        saveCart(cart);
-        renderCart();
-    }
-}
-
-function clearCart() {
-    cart = [];
-    saveCart(cart);
-    coupon = null;
-    updateCartCount();
-}
-
-function calculateSubtotal() {
-    return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-}
-
-function applyCoupon(code) {
-    if (coupon) return { valid: false, message: 'Coupon already applied' };
-    coupon = { code, discount: 0 };
-    return { valid: true, discount: 0 };
-}
-
-function getDiscount() {
-    return coupon ? coupon.discount : 0;
-}
-
-function getTotal() {
-    return calculateSubtotal() - getDiscount();
 }
 
 function showToast(message, type = 'info') {
@@ -97,45 +30,112 @@ function showToast(message, type = 'info') {
     setTimeout(() => toast.remove(), 3000);
 }
 
+function getProductInfo(productId) {
+    return productsData.find(p => String(p.id) === String(productId));
+}
+
+function calculateSubtotal() {
+    return localCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+}
+
+function removeFromCart(productId) {
+    localCart = localCart.filter(item => String(item.product_id) !== String(productId));
+    saveLocalCart(localCart);
+    updateCartCount();
+    renderCart();
+}
+
+function updateQuantity(productId, quantity) {
+    if (quantity < 1) {
+        removeFromCart(productId);
+        return;
+    }
+    const item = localCart.find(item => String(item.product_id) === String(productId));
+    if (item) {
+        item.quantity = quantity;
+        saveLocalCart(localCart);
+        renderCart();
+    }
+}
+
+async function fetchProducts() {
+    try {
+        const response = await fetch(`${API_URL}/products`);
+        if (response.ok) {
+            const data = await response.json();
+            productsData = data.data?.products || [];
+            return;
+        }
+    } catch (e) {
+        console.log('API failed, trying products.json');
+    }
+    
+    try {
+        const res = await fetch('data/products.json');
+        if (res.ok) productsData = await res.json();
+    } catch (e) {
+        console.error('Failed to load products:', e);
+    }
+}
+
+async function fetchCartFromAPI() {
+    try {
+        const response = await fetch(`${API_URL}/cart`, { 
+            credentials: 'include' 
+        });
+        if (response.ok) {
+            const data = await response.json();
+            return data.data || [];
+        }
+    } catch (e) {
+        console.log('API cart fetch failed, using localStorage');
+    }
+    return null;
+}
+
 async function renderCart() {
     const cartItems = document.getElementById('cart-items');
     const subtotalEl = document.getElementById('cart-subtotal');
     const totalEl = document.getElementById('cart-total');
+    const taxEl = document.getElementById('cart-tax');
+    const summaryEl = document.querySelector('.cart-summary');
     const emptyCart = document.getElementById('empty-cart');
     
     if (!cartItems) return;
     
-    cart = getCart();
+    localCart = getLocalCart();
     
-    if (cart.length === 0) {
+    if (localCart.length === 0) {
         cartItems.innerHTML = '';
         if (emptyCart) emptyCart.style.display = 'block';
-        if (subtotalEl) subtotalEl.textContent = '$0.00';
-        if (totalEl) totalEl.textContent = '$0.00';
+        if (summaryEl) summaryEl.style.display = 'none';
         return;
     }
     
     if (emptyCart) emptyCart.style.display = 'none';
+    if (summaryEl) summaryEl.style.display = 'block';
     
-    await fetchProductsForCart();
+    await fetchProducts();
     
-    let html = '';
     let subtotal = 0;
+    let html = '';
     
-    for (const item of cart) {
+    for (const item of localCart) {
         const product = getProductInfo(item.product_id);
-        const displayPrice = item.price;
+        const displayPrice = item.price || (product?.price || 0);
         const itemTotal = displayPrice * item.quantity;
         subtotal += itemTotal;
         
+        const image = item.image || (product?.image_url || product?.image || 'assets/images/logo.png');
+        
         html += `
             <div class="cart-item">
-                <img src="${item.image || (product?.image || 'assets/images/products/placeholder.jpg')}" alt="${item.name}" class="cart-item-image">
+                <img src="${image}" alt="${item.name || product?.name || 'Product'}" class="cart-item-image">
                 <div class="cart-item-details">
-                    <h4>${item.name}</h4>
+                    <h4>${item.name || product?.name || 'Product'}</h4>
                     <p class="cart-item-price">$${displayPrice.toFixed(2)}</p>
                     <div class="cart-item-quantity">
-                        <button onclick="updateQuantity('${item.product_id}', ${item.quantity - 1})" ${item.quantity <= 1 ? 'disabled' : ''}>-</button>
+                        <button onclick="updateQuantity('${item.product_id}', ${item.quantity - 1})">-</button>
                         <span>${item.quantity}</span>
                         <button onclick="updateQuantity('${item.product_id}', ${item.quantity + 1})">+</button>
                     </div>
@@ -147,31 +147,18 @@ async function renderCart() {
     
     cartItems.innerHTML = html;
     
+    const tax = subtotal * 0.10;
+    const total = subtotal + tax;
+    
     if (subtotalEl) subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
-    if (totalEl) totalEl.textContent = `$${subtotal.toFixed(2)}`;
+    if (taxEl) taxEl.textContent = `$${tax.toFixed(2)}`;
+    if (totalEl) totalEl.textContent = `$${total.toFixed(2)}`;
 }
-
-async function fetchProductsForCart() {
-    try {
-        const response = await fetch(`${API_URL}/products`);
-        if (response.ok) {
-            const data = await response.json();
-            productsData = data.data?.products || [];
-        }
-    } catch (e) {
-        try {
-            const res = await fetch('data/products.json');
-            if (res.ok) productsData = await res.json();
-        } catch (e) {}
-    }
-}
-
-let productsData = [];
 
 async function initCart() {
-    await fetchProductsForCart();
+    localCart = getLocalCart();
     updateCartCount();
-    renderCart();
+    await renderCart();
 }
 
 if (document.readyState === 'loading') {

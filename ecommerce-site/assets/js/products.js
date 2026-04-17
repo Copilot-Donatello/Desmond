@@ -224,35 +224,35 @@ document.addEventListener("DOMContentLoaded", async () => {
       
       if (response.ok) {
         showToast(`Added ${product.name} to cart 🛒`, true);
-        // Also sync to localStorage for fallback
-        syncToLocalStorage(product.id, product.name, product.price, product.image_url, qty);
         updateCartCountUI();
       } else {
         const data = await response.json();
         showToast(data.message || 'Error adding to cart');
       }
     } catch (error) {
-      // Fallback to localStorage when backend is not available
-      let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-      const existing = cart.find(item => item.id === product.id);
-      if (existing) {
-        existing.qty += qty;
-      } else {
-        cart.push({ 
-          id: product.id, 
-          qty: qty, 
-          name: product.name, 
-          price: product.price, 
-          image_url: product.image_url,
-          product_id: product.id,
-          quantity: qty,
-          image: product.image_url
-        });
-      }
-      localStorage.setItem("cart", JSON.stringify(cart));
-      showToast(`Added ${product.name} to cart 🛒`, true);
-      updateCartCountUI();
+      console.log('API failed, using localStorage fallback');
     }
+    
+    // Always sync to localStorage
+    let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const existing = cart.find(item => String(item.product_id) === String(product.id));
+    if (existing) {
+      existing.quantity = (existing.quantity || 1) + qty;
+    } else {
+      cart.push({ 
+        id: product.id, 
+        product_id: product.id,
+        qty: qty, 
+        name: product.name, 
+        price: product.price, 
+        image_url: product.image_url,
+        image: product.image_url,
+        quantity: qty
+      });
+    }
+    localStorage.setItem("cart", JSON.stringify(cart));
+    showToast(`Added ${product.name} to cart 🛒`, true);
+    updateCartCountUI();
   }
 
   // Sync item to localStorage
